@@ -20,6 +20,7 @@ class PrototypesController < ApplicationController
 
   def show
     @prototype = Prototype.find(params[:id])
+    @title = @prototype.title
     @user_name = @prototype.user.name
     @image = @prototype.image
     @catch_copy = @prototype.catch_copy
@@ -54,7 +55,8 @@ class PrototypesController < ApplicationController
   end
 
   def move_to_index
-    unless user_signed_in?
+    @prototype = Prototype.find(params[:id])
+    unless current_user.id == @prototype.user_id
       redirect_to action: :index
     end
   end

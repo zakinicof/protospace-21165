@@ -1,23 +1,28 @@
 class CommentsController < ApplicationController
   # フォームで入力されたコメントを保存したい
   def create
-    @comment = Comment.create(comment_params)
-    if @comment.save
-      redirect_to prototype_path(@comment.prototype)
+    comment = Comment.new(text: params[:comment][:text], user_id: current_user.id, prototype_id: params[:comment][:prototype_id])
+    # @comment = Comment.new(comment_params)
+    if comment.save
+      # @prototype = @comment.prototype
+      # comments = @prototype.comments
+      redirect_to prototype_path(params[:comment][:prototype_id])
+      # render "prototypes/show"
+      
+      # redirect_to prototype_path(@comment.prototype)
     else
-      @prototype = @comment.prototype
-      @comments = @prototype.comments
-      render "prototypes/show"
+      redirect_to root_path
+      # render "prototypes/show"
     end
 
     def show
     end
   end
 
-  private
+#   private
 
-  def comment_params
-    params.require(:comment).permit(:text).merge(user_id: current_user.id , prototype_id: current_user.id)
-    # prototype_idの記述が分からない
-  end
+#   def comment_params
+#     params.require(:comment).permit(:text, :user_id, :prototype_id).merge(user_id: current_user.id , prototype_id: prototype.id)
+#     # prototype_idの記述が分からない
+#   end
 end
